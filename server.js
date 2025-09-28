@@ -9,8 +9,8 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 // !!! Pastikan kunci ini adalah kunci API Gemini Anda yang sebenarnya !!!
 const GEMINI_API_KEY = 'AIzaSyAit-i5SLcADlifRRqwIW2UYGpUQqQGmoc'; 
 
-// --- PERBAIKAN PENTING DI SINI: MENGHILANGKAN PENGECKEKAN KUNCI YANG SALAH ---
-// Blok pengecekan lama dihapus agar program tidak terhenti setelah kunci dimasukkan.
+// --- PENGECKEKAN KUNCI API ---
+// Memastikan kunci tidak kosong.
 if (!GEMINI_API_KEY) {
     console.error("FATAL ERROR: Kunci API Gemini kosong. Harap masukkan kunci API yang valid.");
     process.exit(1);
@@ -25,12 +25,24 @@ const aiModel = genAI.getGenerativeModel({
 async function getAiResponse(prompt) {
     try {
         const result = await aiModel.generateContent(prompt);
-        // Hapus karakter markdown yang berlebihan atau tidak perlu
-        const responseText = result.text.replace(/[*_]/g, ''); 
-        return responseText;
+        
+        // --- PERBAIKAN UTAMA DI SINI ---
+        // Pengecekan untuk memastikan result.text ada sebelum memanggil .replace()
+        if (result.text) {
+            // Hapus karakter markdown yang berlebihan atau tidak perlu
+            const responseText = result.text.replace(/[*_]/g, ''); 
+            return responseText;
+        } else {
+            // Kasus jika balasan AI diblokir (safety block) atau kosong
+            console.error("Gemini API Blocked/Empty Response:", result.promptFeedback);
+            return "Maaf, saya tidak dapat merespons pertanyaan ini. Balasan AI mungkin diblokir oleh filter keamanan. Mohon coba pertanyaan lain yang lebih umum.";
+        }
+        // -----------------------------
+
     } catch (error) {
-        console.error("Gemini API Error:", error);
-        return "Maaf, terjadi kesalahan pada sistem AI kami. Mohon coba lagi nanti. (Kode error: G-API)";
+        // Ini menangkap error umum, termasuk jika Kunci API tidak valid.
+        console.error("Gemini API General Error:", error);
+        return "Maaf, terjadi kesalahan umum saat berkomunikasi dengan sistem AI. Harap periksa kembali Kunci API Anda. (Kode error: G-API)";
     }
 }
 
@@ -142,7 +154,6 @@ client.on('message', async (msg) => {
         // Kirim indikator 'typing...' atau balasan cepat
         msg.reply('...'); 
         
-        // Hapus logika CHAT SIDHANIE dan ganti dengan CHAT AI lagi
         const aiResponse = await getAiResponse(body);
         client.sendMessage(chatId, aiResponse); 
         return;
