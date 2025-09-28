@@ -6,11 +6,13 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 // A. INILISIALISASI GEMINI AI
 // =======================================================
 
-// !!! GANTI dengan kunci API Anda yang sebenarnya !!!
+// !!! Pastikan kunci ini adalah kunci API Gemini Anda yang sebenarnya !!!
 const GEMINI_API_KEY = 'AIzaSyAit-i5SLcADlifRRqwIW2UYGpUQqQGmoc'; 
 
-if (GEMINI_API_KEY === 'AIzaSyAit-i5SLcADlifRRqwIW2UYGpUQqQGmoc' || !GEMINI_API_KEY) {
-    console.error("FATAL ERROR: Harap ganti 'YOUR_GEMINI_API_KEY' dengan kunci API Gemini Anda yang valid.");
+// --- PERBAIKAN PENTING DI SINI: MENGHILANGKAN PENGECKEKAN KUNCI YANG SALAH ---
+// Blok pengecekan lama dihapus agar program tidak terhenti setelah kunci dimasukkan.
+if (!GEMINI_API_KEY) {
+    console.error("FATAL ERROR: Kunci API Gemini kosong. Harap masukkan kunci API yang valid.");
     process.exit(1);
 }
 
@@ -81,6 +83,9 @@ client.on('ready', () => {
 client.on('message', async (msg) => {
     const body = msg.body.trim();
     const chatId = msg.from; 
+    
+    // ABAIKAN PESAN DARI DIRI SENDIRI UNTUK MENCEGAH LOOP
+    if (msg.id.fromMe) return;
 
     // Coba konversi body menjadi angka
     const choice = parseInt(body);
@@ -112,7 +117,7 @@ client.on('message', async (msg) => {
                 // AKTIFKAN MODE CHAT AI
                 aiChatSessions[chatId] = true; 
                 msg.reply(
-                    'Anda memilih *1. CHAT SIDHANIE*. Silakan mulai mengobrol dengan saya! \n\n🤖 *Ketik 0 atau 00 untuk keluar dari mode Chat SIDHANIE dan kembali ke Menu Utama.*'
+                    'Anda memilih *1. CHAT AI*. Silakan mulai mengobrol dengan saya! \n\n🤖 *Ketik 0 atau 00 untuk keluar dari mode Chat AI dan kembali ke Menu Utama.*'
                 );
                 break;
             case 2:
@@ -136,7 +141,8 @@ client.on('message', async (msg) => {
 
         // Kirim indikator 'typing...' atau balasan cepat
         msg.reply('...'); 
-
+        
+        // Hapus logika CHAT SIDHANIE dan ganti dengan CHAT AI lagi
         const aiResponse = await getAiResponse(body);
         client.sendMessage(chatId, aiResponse); 
         return;
