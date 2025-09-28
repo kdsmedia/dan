@@ -7,9 +7,9 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 // =======================================================
 
 // !!! GANTI dengan kunci API Anda yang sebenarnya !!!
-const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY'; 
+const GEMINI_API_KEY = 'AIzaSyAit-i5SLcADlifRRqwIW2UYGpUQqQGmoc'; 
 
-if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY' || !GEMINI_API_KEY) {
+if (GEMINI_API_KEY === 'AIzaSyAit-i5SLcADlifRRqwIW2UYGpUQqQGmoc' || !GEMINI_API_KEY) {
     console.error("FATAL ERROR: Harap ganti 'YOUR_GEMINI_API_KEY' dengan kunci API Gemini Anda yang valid.");
     process.exit(1);
 }
@@ -112,17 +112,17 @@ client.on('message', async (msg) => {
                 // AKTIFKAN MODE CHAT AI
                 aiChatSessions[chatId] = true; 
                 msg.reply(
-                    'Anda memilih *1. CHAT AI*. Silakan mulai mengobrol dengan saya! \n\n🤖 *Ketik 0 atau 00 untuk keluar dari mode Chat AI dan kembali ke Menu Utama.*'
+                    'Anda memilih *1. CHAT SIDHANIE*. Silakan mulai mengobrol dengan saya! \n\n🤖 *Ketik 0 atau 00 untuk keluar dari mode Chat SIDHANIE dan kembali ke Menu Utama.*'
                 );
                 break;
             case 2:
-                msg.reply('Anda memilih *2. TIKTOK*. Kunjungi akun kami: \n[https://www.tiktok.com/@akun_anda]');
+                msg.reply('Anda memilih *2. TIKTOK*. Kunjungi akun kami: \n[https://www.tiktok.com/@sidhanie]');
                 break;
             case 3:
-                msg.reply('Anda memilih *3. YOUTUBE*. Tonton konten menarik kami: \n[https://www.youtube.com/channel/link_anda]');
+                msg.reply('Anda memilih *3. YOUTUBE*. Tonton konten menarik kami: \n[https://www.youtube.com/@sidhanie06]');
                 break;
             case 4:
-                msg.reply('Anda memilih *4. SPOTIFY*. Dengarkan playlist kami: \n[https://open.spotify.com/playlist/link_anda]');
+                msg.reply('Anda memilih *4. SPOTIFY*. Dengarkan playlist kami: \n[https://open.spotify.com]');
                 break;
         }
         return; 
@@ -146,7 +146,7 @@ client.on('message', async (msg) => {
     // Ini adalah heuristik untuk pengguna baru atau pesan yang tidak dikenali
     if (body.length > 0) {
         // Tampilkan menu utama sebagai panduan
-        client.sendMessage(chatId, `Mohon maaf, bot tidak mengerti input Anda. Silakan pilih dari menu di bawah.`);
+        client.sendMessage(chatId, `Mohon maaf, saya tidak mengerti input Anda. Silakan pilih dari menu di bawah.`);
         client.sendMessage(chatId, MAIN_MENU);
     }
 });
