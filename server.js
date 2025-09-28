@@ -35,14 +35,14 @@ async function getAiResponse(prompt) {
         } else {
             // Kasus jika balasan AI diblokir (safety block) atau kosong
             console.error("Gemini API Blocked/Empty Response:", result.promptFeedback);
-            return "Maaf, saya tidak dapat merespons pertanyaan ini. Balasan AI mungkin diblokir oleh filter keamanan. Mohon coba pertanyaan lain yang lebih umum.";
+            return "Maaf, saya tidak dapat merespons pertanyaan ini. Balasan mungkin diblokir oleh filter keamanan. Mohon coba pertanyaan lain yang lebih umum.";
         }
         // -----------------------------
 
     } catch (error) {
         // Ini menangkap error umum, termasuk jika Kunci API tidak valid.
         console.error("Gemini API General Error:", error);
-        return "Maaf, terjadi kesalahan umum saat berkomunikasi dengan sistem AI. Harap periksa kembali Kunci API Anda. (Kode error: G-API)";
+        return "Maaf, terjadi kesalahan umum saat berkomunikasi dengan sistem. Harap periksa kembali Kunci API Anda. (Kode error: G-API)";
     }
 }
 
@@ -64,17 +64,17 @@ const client = new Client({
 // Teks Menu Utama
 const MAIN_MENU = 
 `====================
-      SELAMAT DATANG
+      *SELAMAT DATANG*
 ====================
-*Silakan pilih menu dengan mengetikkan ANGKA yang sesuai:*
+*Silakan pilih menu dengan ktik ANGKA yang sesuai:*
 
-*1.* CHAT AI (Ngobrol otomatis)
-*2.* TIKTOK (Kunjungi Akun Kami)
-*3.* YOUTUBE (Lihat Video Kami)
-*4.* SPOTIFY (Dengarkan Playlist Kami)
+*1.* CHAT AI _(Ngobrol otomatis)_
+*2.* TIKTOK _(Kunjungi Akun Kami)_
+*3.* YOUTUBE _(Lihat Video Kami)_
+*4.* SPOTIFY _(Dengarkan Playlist Kami)_
 ====================
-Ketik *0* untuk keluar dari CHAT AI atau kembali ke menu.
-Ketik *00* untuk menampilkan menu ini lagi.
+Ketik *0* untuk keluar dari CHAT.
+Ketik *00* untuk menu ini lagi.
 ====================
 `;
 
@@ -111,7 +111,7 @@ client.on('message', async (msg) => {
         // Jika sedang dalam mode AI, keluar dari mode AI
         if (aiChatSessions[chatId]) {
             aiChatSessions[chatId] = false;
-            msg.reply('Anda telah keluar dari *Mode CHAT AI*.');
+            msg.reply('Anda telah keluar dari *Mode CHAT*.');
         }
         
         // Selalu tampilkan menu utama
@@ -129,7 +129,7 @@ client.on('message', async (msg) => {
                 // AKTIFKAN MODE CHAT AI
                 aiChatSessions[chatId] = true; 
                 msg.reply(
-                    'Anda memilih *1. CHAT AI*. Silakan mulai mengobrol dengan saya! \n\n🤖 *Ketik 0 atau 00 untuk keluar dari mode Chat AI dan kembali ke Menu Utama.*'
+                    'Anda memilih *1. CHAT*. Silakan mulai mengobrol dengan saya! \n\n🤖 *Ketik 0 atau 00 untuk keluar dari mode Chat AI dan kembali ke Menu Utama.*'
                 );
                 break;
             case 2:
